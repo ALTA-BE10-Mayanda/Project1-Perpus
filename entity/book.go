@@ -3,15 +3,15 @@ package entity
 import "gorm.io/gorm"
 
 type Book struct {
-	id        uint   `gorm:"primary_key:auto_increment"`
-	user_id   uint 
-	genre_id  uint
-	title     string `gorm:"type:varchar(50)"`
-	isbn      string `gorm:"type:varchar(13)"`
-	author    string `gorm:"type:varchar(10)"`
-	penerbit  string `gorm:"type:varchar(10)"`
-	jumlah    uint   `gorm:"type:varchar(10)"`
-	deskripsi string `gorm:"type:varchar(10)"`
+	Id        uint   `gorm:"primaryKey;autoIncrement:true"`
+	User_id   uint 
+	Genre_id  uint
+	Title     string `gorm:"type:varchar(50)"`
+	Isbn      string `gorm:"type:varchar(13)"`
+	Author    string `gorm:"type:varchar(10)"`
+	Penerbit  string `gorm:"type:varchar(10)"`
+	Jumlah    uint   `gorm:"type:varchar(10)"`
+	Deskripsi string `gorm:"type:varchar(10)"`
 }
 
 type AksesBook struct {

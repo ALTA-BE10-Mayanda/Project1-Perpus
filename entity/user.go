@@ -3,16 +3,16 @@ package entity
 import (
 	"log"
 
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
+type User struct {gorm.Model
 
-type User struct {
-	id       uint   `gorm:"primary_key:auto_increment"`
-	nama     string `gorm:"type:varchar(100)"`
-	address  string `gorm:"type:varchar(50)"`
-	hp       string `gorm:"type:varchar(13)"`
-	password string `gorm:"type:varchar(10)"`
+	Id       uint   `gorm:"primaryKey"`
+	Nama     string `gorm:"type:varchar(100)"`
+	Address  string `gorm:"type:varchar(50)"`
+	Hp       string `gorm:"type:varchar(13)"`
+	Password string `gorm:"type:varchar(10)"`
+	Books []Book `gorm:"foreignKey:User_id"`
 }
 
 type AksesUser struct {
@@ -21,7 +21,7 @@ type AksesUser struct {
 
 func (au *AksesUser) GetAllUser() []User {
 	var daftarUser []User
-	//err := au.DB.Raw("Select * from user").Scan(&daftarUser)
+	// err := au.DB.Raw("Select * from user").Scan(&daftarUser)
 	err := au.DB.Find(&daftarUser)
 	if err.Error != nil {
 		log.Fatal(err.Statement.SQL.String())
@@ -33,12 +33,7 @@ func (au *AksesUser) GetAllUser() []User {
 
 func (au *AksesUser) AddNewUser(newUser User) User {
 
-	if newUser.nama == "Levi" {
-		newUser.id = uint(1)
-	}
-	uid := uuid.New()
-	newUser.address = uid.String()
-	newUser.hp = uid.String()
+
 	err := au.DB.Create(&newUser).Error
 	if err != nil {
 		log.Println(err)
@@ -50,7 +45,7 @@ func (au *AksesUser) AddNewUser(newUser User) User {
 
 func (au *AksesUser) GetSpecificUser(id int) User {
 	var daftarUser = User{}
-	daftarUser.id = uint(id)
+	daftarUser.Id = uint(id)
 	// err := as.DB.Raw("Select * from student").Scan(&daftarStudent)
 	err := au.DB.First(&daftarUser)
 	if err.Error != nil {
@@ -60,6 +55,24 @@ func (au *AksesUser) GetSpecificUser(id int) User {
 
 	return daftarUser
 }
+
+func (su *AksesUser) LoginUser(nama, password string) []User {
+	var ListUser = []User{}
+	if err := su.DB.Where("Nama = ? and Password = ?", nama, password).First(&ListUser).Error; err != nil {
+	  log.Print(err)
+	  return nil
+	}
+	return ListUser
+  }
+
+// func (as *UpdaeteUser) UpdateDataUser(IdUser uint) user {
+// 	err := 	as.db.Model(&User{}).Where("id = ?", IdUser).Update(User{})
+// 	if err != nil {
+// 		log.Fatal(err.Error)
+// 		return User{}
+// 	}
+// 	return User{}
+// }
 
 func (as *AksesUser) HapusMurid(IdUser int) bool {
 	postExc := as.DB.Where("id = ?", IdUser).Delete(&User{})
