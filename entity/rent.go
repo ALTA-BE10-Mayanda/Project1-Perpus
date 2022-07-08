@@ -1,11 +1,15 @@
 package entity
 
-import "time"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type Rent struct {
-	id          uint `gorm:"primary_key:auto_increment"`
-	user_id     uint 
-	book_id     uint
-	created_at  time.Time  `gorm:"autoCreateTime"`
-	return_date time.Time
+	gorm.Model
+	Id          uint       `gorm:"primaryKey;autoIncrement:true"`
+	User_id     uint 
+	Book_id     uint
+	Created_at  time.Time  `gorm:"autoCreateTime"`
 }

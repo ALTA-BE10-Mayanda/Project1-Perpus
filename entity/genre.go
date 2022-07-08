@@ -1,6 +1,12 @@
 package entity
 
+import "gorm.io/gorm"
+
 type Genre struct {
-	id       uint    `gorm:"primary_key:auto_increment"`
-	nama     string  `gorm:"type:varchar(20)"`
+	gorm.Model
+	Id   uint   `gorm:"primaryKey;autoIncrement:true"`
+	Nama string `gorm:"type:varchar(20)"`
+	Books Book `gorm:"foreignKey:Genre_id;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	
 }
+
